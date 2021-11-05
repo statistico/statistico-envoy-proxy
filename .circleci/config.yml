@@ -1,0 +1,33 @@
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@0.1.20
+  aws-ecs: circleci/aws-ecs@1.1.0
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - release-images:
+          context: aws
+          filters:
+            branches:
+              only: main
+
+jobs:
+  release-images:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - setup_remote_docker
+      - aws-cli/setup
+      - run:
+          name: Build and push images to ECR
+          environment:
+            STATISTICO_FOOTBALL_DATA_HOST: statistico-football-data.statistico.internal
+            STATISTICO_FOOTBALL_DATA_PORT: 50051
+            STATISTICO_RATINGS_HOST: statistico-ratings.statistico.internal
+            STATISTICO_RATINGS_PORT: 50051
+          command: |
+            aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION | bash
+            docker build -t $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1 -f ./Dockerfile .
+            docker push $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1
