@@ -11,7 +11,7 @@ workflows:
           context: aws
           filters:
             branches:
-              only: master
+              only: main
 
 jobs:
   release-images:
