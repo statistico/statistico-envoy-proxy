@@ -3,31 +3,79 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.20
   aws-ecs: circleci/aws-ecs@1.1.0
 
+references:
+  workspace_root: &workspace_root
+                    /tmp/workspace
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
 workflows:
   version: 2
   build-test-deploy:
     jobs:
+      - build
       - release-images:
           context: aws
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+      - deploy-to-production:
+          context: aws
+          requires:
+            - build
+            - release-images
           filters:
             branches:
               only: main
 
 jobs:
-  release-images:
-    executor: aws-cli/default
+  build:
+    working_directory: ~/statistico-envoy-proxy
+    machine: true
+    environment:
+      GOPATH: /home/circleci/go
     steps:
       - checkout
-      - setup_remote_docker
-      - aws-cli/setup
       - run:
-          name: Build and push images to ECR
+          name: Build Release Image
           environment:
             STATISTICO_FOOTBALL_DATA_HOST: statistico-football-data.statistico.internal
             STATISTICO_FOOTBALL_DATA_PORT: 50051
             STATISTICO_RATINGS_HOST: statistico-ratings.statistico.internal
             STATISTICO_RATINGS_PORT: 50051
           command: |
-            aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION | bash
-            docker build -t $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1 -f ./Dockerfile .
-            docker push $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1
+            docker-compose -f docker-compose.production.yml up -d --build
+      - run:
+          name: Cache Built Images
+          command: |
+            chmod +x ./.circleci/deploy/docker-save.sh && ./.circleci/deploy/docker-save.sh
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - docker-cache
+
+  release-images:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - *attach_workspace
+      - setup_remote_docker
+      - aws-cli/setup
+      - run:
+          name: Push images to ECR
+          command: |
+            chmod +x ./.circleci/deploy/docker-load.sh && ./.circleci/deploy/docker-load.sh
+            chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
+
+  deploy-to-production:
+    docker:
+      - image: 'circleci/python:3.7.1'
+    steps:
+      - aws-cli/setup
+      - aws-ecs/update-task-definition:
+          family: 'statistico-envoy-proxy'
+          container-image-name-updates: >
+            container=statistico-envoy-proxy,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-envoy-proxy:${CIRCLE_SHA1}
