@@ -33,6 +33,11 @@ jobs:
       - checkout
       - run:
           name: Build Release Image
+          environment:
+            STATISTICO_FOOTBALL_DATA_HOST: statistico-football-data.statistico.internal
+            STATISTICO_FOOTBALL_DATA_PORT: 50051
+            STATISTICO_RATINGS_HOST: statistico-ratings.statistico.internal
+            STATISTICO_RATINGS_PORT: 50051
           command: |
             docker-compose -f docker-compose.production.yml up -d --build
       - run:
@@ -53,11 +58,6 @@ jobs:
       - aws-cli/setup
       - run:
           name: Push images to ECR
-          environment:
-            STATISTICO_FOOTBALL_DATA_HOST: statistico-football-data.statistico.internal
-            STATISTICO_FOOTBALL_DATA_PORT: 50051
-            STATISTICO_RATINGS_HOST: statistico-ratings.statistico.internal
-            STATISTICO_RATINGS_PORT: 50051
           command: |
             chmod +x ./.circleci/deploy/docker-load.sh && ./.circleci/deploy/docker-load.sh
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
