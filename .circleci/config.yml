@@ -29,6 +29,6 @@ jobs:
             STATISTICO_RATINGS_PORT: 50051
           command: |
             aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION | bash
-            docker-compose -f docker-compose.build.production.yml up -d --build
+            docker-compose -f docker-compose.production.yml up -d --build
             docker tag statisticoenvoyproxy_envoy $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1
             docker push $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1
