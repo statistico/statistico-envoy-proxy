@@ -4,8 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    mem_limit: 1024M
-    mem_reservation: 256M
     environment:
       STATISTICO_FOOTBALL_DATA_HOST: statistico-football-data.statistico.internal
       STATISTICO_FOOTBALL_DATA_PORT: 50051
