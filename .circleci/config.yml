@@ -30,4 +30,4 @@ jobs:
               --build-arg STATISTICO_RATINGS_HOST=statistico-ratings.statistico.internal \
               --build-arg STATISTICO_RATINGS_PORT=50051 \
               -t $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1 -f ./Dockerfile .
-            docker push $AWS_ECR_ACCOUNT_URL/statisti
+            docker push $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:$CIRCLE_SHA1
