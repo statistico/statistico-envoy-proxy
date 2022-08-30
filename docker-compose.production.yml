@@ -7,5 +7,7 @@ services:
     environment:
       STATISTICO_FOOTBALL_DATA_HOST: statistico-football-data.statistico.internal
       STATISTICO_FOOTBALL_DATA_PORT: 50051
+      STATISTICO_ODDS_COMPILER_HOST: statistico-odds-compiler.statistico.internal
+      STATISTICO_ODDS_COMPILER_PORT: 50051
       STATISTICO_RATINGS_HOST: statistico-ratings.statistico.internal
       STATISTICO_RATINGS_PORT: 50051
