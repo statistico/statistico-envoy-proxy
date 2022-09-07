@@ -11,3 +11,5 @@ services:
       STATISTICO_ODDS_COMPILER_PORT: 50051
       STATISTICO_RATINGS_HOST: statistico-ratings.statistico.internal
       STATISTICO_RATINGS_PORT: 50051
+      STATISTICO_TRADER_HOST: statistico-trader.statistico.internal
+      STATISTICO_TRADER_PORT: 50051
