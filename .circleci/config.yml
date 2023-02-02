@@ -12,13 +12,13 @@ workflows:
           filters:
             branches:
               only: master
-      - deploy-to-production:
-          context: aws
-          requires:
-            - release-images
-          filters:
-            branches:
-              only: master
+#      - deploy-to-production:
+#          context: aws
+#          requires:
+#            - release-images
+#          filters:
+#            branches:
+#              only: master
 
 jobs:
   release-images:
@@ -43,13 +43,13 @@ jobs:
               -t $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:latest -f ./Dockerfile .
             docker push $AWS_ECR_ACCOUNT_URL/statistico-envoy-proxy:latest
 
-  deploy-to-production:
-    docker:
-      - image: 'circleci/python:3.7.1'
-    steps:
-      - aws-cli/setup
-      - aws-ecs/update-service:
-          family: 'statistico-envoy-proxy'
-          cluster: 'statistico-production'
-          container-image-name-updates: >
-            container=statistico-envoy-proxy,tag=latest
+#  deploy-to-production:
+#    docker:
+#      - image: 'circleci/python:3.7.1'
+#    steps:
+#      - aws-cli/setup
+#      - aws-ecs/update-service:
+#          family: 'statistico-envoy-proxy'
+#          cluster: 'statistico-production'
+#          container-image-name-updates: >
+#            container=statistico-envoy-proxy,tag=latest
