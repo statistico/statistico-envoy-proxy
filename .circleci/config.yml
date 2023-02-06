@@ -50,6 +50,6 @@ jobs:
       - aws-cli/setup
       - aws-ecs/update-service:
           family: 'statistico-envoy-proxy'
-          cluster: 'statistico-production'
+          cluster: 'statistico-services'
           container-image-name-updates: >
             container=statistico-envoy-proxy,tag=latest
