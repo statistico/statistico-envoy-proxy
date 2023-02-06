@@ -15,6 +15,9 @@ services:
       STATISTICO_ODDS_COMPILER_PORT: 50051
       STATISTICO_RATINGS_HOST: statistico-ratings-grpc
       STATISTICO_RATINGS_PORT: 50051
+      STATISTICO_TRADER_HOST: statistico-trader-grpc
+      STATISTICO_TRADER_PORT: 50051
+
     ports:
       - "9900:9900"
       - "8080:8080"
