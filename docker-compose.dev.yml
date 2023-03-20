@@ -13,6 +13,8 @@ services:
       STATISTICO_FOOTBALL_DATA_PORT: 50051
       STATISTICO_ODDS_COMPILER_HOST: statistico-odds-compiler.statistico.internal
       STATISTICO_ODDS_COMPILER_PORT: 50051
+      STATISTICO_ODDS_WAREHOUSE_HOST: statistico-odds-warehouse.statistico.internal
+      STATISTICO_ODDS_WAREHOUSE_PORT: 50051
       STATISTICO_RATINGS_HOST: statistico-ratings-grpc
       STATISTICO_RATINGS_PORT: 50051
       STATISTICO_TRADER_HOST: statistico-trader-grpc
