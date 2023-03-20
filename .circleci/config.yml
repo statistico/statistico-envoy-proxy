@@ -36,6 +36,8 @@ jobs:
               --build-arg STATISTICO_FOOTBALL_DATA_PORT=50051 \
               --build-arg STATISTICO_ODDS_COMPILER_HOST=statistico-odds-compiler.statistico.internal \
               --build-arg STATISTICO_ODDS_COMPILER_PORT=50051 \
+              --build-arg STATISTICO_ODDS_WAREHOUSE_HOST=statistico-odds-warehouse.statistico.internal \
+              --build-arg STATISTICO_ODDS_WAREHOUSE_PORT=50051 \
               --build-arg STATISTICO_RATINGS_HOST=statistico-ratings.statistico.internal \
               --build-arg STATISTICO_RATINGS_PORT=50051 \
               --build-arg STATISTICO_TRADER_HOST=statistico-trader.statistico.internal \
