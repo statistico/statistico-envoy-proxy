@@ -30,6 +30,12 @@ static_resources:
                             timeout: 0s
                             max_stream_duration:
                               grpc_timeout_header_max: 0s
+                        - match: { prefix: "/statistico.OddsWarehouseService/" }
+                          route:
+                            cluster: statistico_odds_warehouse
+                            timeout: 0s
+                            max_stream_duration:
+                              grpc_timeout_header_max: 0s
                         - match: { prefix: "/statistico.FixtureService/" }
                           route:
                             cluster: statistico_football_data
@@ -106,6 +112,20 @@ static_resources:
                     socket_address:
                       address: ${STATISTICO_ODDS_COMPILER_HOST}
                       port_value: ${STATISTICO_ODDS_COMPILER_PORT}
+    - name: statistico_odds_warehouse
+      connect_timeout: 0.25s
+      type: logical_dns
+      http2_protocol_options: {}
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: cluster_0
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: ${STATISTICO_ODDS_WAREHOUSE_HOST}
+                      port_value: ${STATISTICO_ODDS_WAREHOUSE_PORT}
     - name: statistico_ratings
       connect_timeout: 0.25s
       type: logical_dns
