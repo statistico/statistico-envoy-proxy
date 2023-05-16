@@ -36,6 +36,12 @@ static_resources:
                             timeout: 0s
                             max_stream_duration:
                               grpc_timeout_header_max: 0s
+                        - match: { prefix: "/statistico.CompetitionService/" }
+                          route:
+                            cluster: statistico_football_data
+                            timeout: 0s
+                            max_stream_duration:
+                              grpc_timeout_header_max: 0s
                         - match: { prefix: "/statistico.FixtureService/" }
                           route:
                             cluster: statistico_football_data
