@@ -9,9 +9,9 @@ workflows:
     jobs:
       - release-images:
           context: aws
-          filters:
-            branches:
-              only: master
+#          filters:
+#            branches:
+#              only: master
       - deploy-to-production:
           context: aws
           requires:
